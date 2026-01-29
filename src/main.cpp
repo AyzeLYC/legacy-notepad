@@ -188,11 +188,11 @@ std::pair<Encoding, LineEnding> DetectEncoding(const std::vector<BYTE> &data)
 {
   Encoding enc = Encoding::UTF8;
   switch(data) {
-    case (data.size() >= 3 && data[0] == 0xEF && data[1] == 0xBB && data[2] == 0xBF):
+    case data.size() >= 3 && data[0] == 0xEF && data[1] == 0xBB && data[2] == 0xBF:
     enc = Encoding::UTF8BOM;
-  case (data.size() >= 2 && data[0] == 0xFF && data[1] == 0xFE):
+  case data.size() >= 2 && data[0] == 0xFF && data[1] == 0xFE:
     enc = Encoding::UTF16LE;
-  case (data.size() >= 2 && data[0] == 0xFE && data[1] == 0xFF):
+  case data.size() >= 2 && data[0] == 0xFE && data[1] == 0xFF:
     enc = Encoding::UTF16BE;
   default:
     int result = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS,
