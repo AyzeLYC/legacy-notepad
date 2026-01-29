@@ -187,20 +187,14 @@ const wchar_t *GetLineEndingName(LineEnding le)
 std::pair<Encoding, LineEnding> DetectEncoding(const std::vector<BYTE> &data)
 {
   Encoding enc = Encoding::UTF8;
-  if (data.size() >= 3 && data[0] == 0xEF && data[1] == 0xBB && data[2] == 0xBF)
-  {
+  switch(data) {
+    case (data.size() >= 3 && data[0] == 0xEF && data[1] == 0xBB && data[2] == 0xBF):
     enc = Encoding::UTF8BOM;
-  }
-  else if (data.size() >= 2 && data[0] == 0xFF && data[1] == 0xFE)
-  {
+  case (data.size() >= 2 && data[0] == 0xFF && data[1] == 0xFE):
     enc = Encoding::UTF16LE;
-  }
-  else if (data.size() >= 2 && data[0] == 0xFE && data[1] == 0xFF)
-  {
+  case (data.size() >= 2 && data[0] == 0xFE && data[1] == 0xFF):
     enc = Encoding::UTF16BE;
-  }
-  else
-  {
+  default:
     int result = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS,
                                      reinterpret_cast<const char *>(data.data()), static_cast<int>(data.size()), nullptr, 0);
     if (result == 0 && GetLastError() == ERROR_NO_UNICODE_TRANSLATION)
